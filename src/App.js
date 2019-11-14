@@ -53,5 +53,5 @@ const buttonStyle = {
   borderColor: '#000000',
   paddingTop: 60,
   paddingBottom: 60,
-  outline: none
+  outline: 'none'
 };
