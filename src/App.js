@@ -52,5 +52,6 @@ const buttonStyle = {
   borderStyle: 'solid',
   borderColor: '#000000',
   paddingTop: 60,
-  paddingBottom: 60
+  paddingBottom: 60,
+  outline: none
 };
