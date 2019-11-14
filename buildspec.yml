@@ -9,7 +9,7 @@ phases:
     commands:
       - echo Installing source NPM dependencies...
       - npm ci
-      - npm run verify
+#      - npm run verify
   build:
     commands:
       - echo Build started on `date`
