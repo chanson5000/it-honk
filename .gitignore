@@ -40,6 +40,7 @@ typings/
 
 # Optional npm cache directory
 .npm
+.npm-cache
 
 # Optional eslint cache
 .eslintcache
@@ -73,6 +74,7 @@ typings/
 
 # production
 /build
+/dist
 
 # misc
 .DS_Store
