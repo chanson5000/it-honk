@@ -29,6 +29,6 @@ it('plays the selected honk when clicked', () => {
   });
   fireEvent.click(screen.getByRole('button', { name: /honk/i }));
 
-  expect(AudioMock).toHaveBeenCalledWith('/honks/goose.mp3');
+  expect(AudioMock).toHaveBeenCalledWith(`${import.meta.env.BASE_URL}honks/goose.mp3`);
   expect(play).toHaveBeenCalledOnce();
 });
