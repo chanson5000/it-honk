@@ -21,4 +21,5 @@ Drop the audio file in `public/honks/` and add an entry to the `HONKS` list in `
 
 ## Deployment
 
-`buildspec.yml` builds the site on AWS CodeBuild and publishes the contents of `dist/`.
+Every push to `master` is tested, built, and deployed to GitHub Pages by
+`.github/workflows/ci.yml`. The custom domain is set by `public/CNAME`.
