@@ -4,11 +4,15 @@ import App, { HONKS } from './App.jsx';
 
 let AudioMock;
 let play;
+let instances;
 
 beforeEach(() => {
   play = vi.fn(() => Promise.resolve());
+  instances = [];
   AudioMock = vi.fn(function () {
     this.play = play;
+    this.pause = vi.fn();
+    instances.push(this);
   });
   vi.stubGlobal('Audio', AudioMock);
 });
@@ -49,4 +53,18 @@ it('plays the selected honk and shows a burst when clicked', () => {
 
   expect(AudioMock).toHaveBeenCalledWith(url('goose.mp3'));
   expect(screen.getByText('HONK!')).toBeInTheDocument();
+});
+
+it('stops the previous honk when a new one starts', () => {
+  render(<App />);
+  const button = screen.getByRole('button', { name: /honk/i });
+
+  fireEvent.click(button);
+  fireEvent.click(button);
+  fireEvent.click(screen.getByRole('radio', { name: /goose/i }));
+
+  expect(instances).toHaveLength(3);
+  expect(instances[0].pause).toHaveBeenCalledOnce();
+  expect(instances[1].pause).toHaveBeenCalledOnce();
+  expect(instances[2].pause).not.toHaveBeenCalled();
 });

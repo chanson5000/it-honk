@@ -18,6 +18,11 @@ npm run preview  # serve the production build locally
 ## Adding a honk
 
 Drop the audio file in `public/honks/` and add an entry to the `HONKS` list in `src/App.jsx`.
+Use MP3 to keep the page light; convert other formats with:
+
+```bash
+ffmpeg -i input.wav -map 0:a -map_metadata -1 -c:a libmp3lame -q:a 2 public/honks/name.mp3
+```
 
 ## Deployment
 

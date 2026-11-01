@@ -2,32 +2,36 @@ import { useRef, useState } from 'react';
 import './App.css';
 
 export const HONKS = [
-  { file: 'ahooga.wav', label: 'Ahooga', emoji: '🤪' },
+  { file: 'ahooga.mp3', label: 'Ahooga', emoji: '🤪' },
   { file: 'air_horn.mp3', label: 'Air Horn', emoji: '📢' },
-  { file: 'bike_bell.wav', label: 'Bike Bell', emoji: '🔔' },
+  { file: 'bike_bell.mp3', label: 'Bike Bell', emoji: '🔔' },
   { file: 'clown.mp3', label: 'Clown', emoji: '🤡' },
   { file: 'fog_horn.mp3', label: 'Fog Horn', emoji: '🚢' },
   { file: 'goose.mp3', label: 'Goose', emoji: '🪿' },
-  { file: 'keiths_car.wav', label: "Keith's Car", emoji: '🚙' },
-  { file: 'new_car_horn.wav', label: 'New Car Horn', emoji: '🚗' },
-  { file: 'old_bike_horn.wav', label: 'Old Bike Horn', emoji: '🚲' },
-  { file: 'old_car_horn.wav', label: 'Old Car Horn', emoji: '🚘' },
-  { file: 'short_new.wav', label: 'Beep', emoji: '🔊' },
-  { file: 'too_many_bike_horns.wav', label: 'Ragbrai', emoji: '🚴' },
-  { file: 'vuvuzela.wav', label: 'Vuvuzela', emoji: '📯' },
+  { file: 'keiths_car.mp3', label: "Keith's Car", emoji: '🚙' },
+  { file: 'new_car_horn.mp3', label: 'New Car Horn', emoji: '🚗' },
+  { file: 'old_bike_horn.mp3', label: 'Old Bike Horn', emoji: '🚲' },
+  { file: 'old_car_horn.mp3', label: 'Old Car Horn', emoji: '🚘' },
+  { file: 'short_new.mp3', label: 'Beep', emoji: '🔊' },
+  { file: 'too_many_bike_horns.mp3', label: 'Ragbrai', emoji: '🚴' },
+  { file: 'vuvuzela.mp3', label: 'Vuvuzela', emoji: '📯' },
 ];
 
 const honkUrl = (file) => `${import.meta.env.BASE_URL}honks/${file}`;
-
-const play = (file) => {
-  // A new Audio element per play lets honks overlap when mashed.
-  new Audio(honkUrl(file)).play().catch(() => {});
-};
 
 function App() {
   const [honkType, setHonkType] = useState(HONKS[0].file);
   const [bursts, setBursts] = useState([]);
   const nextBurstId = useRef(0);
+  const currentAudio = useRef(null);
+
+  // Only one honk at a time: a new honk (or preview) cuts off the previous one.
+  const play = (file) => {
+    currentAudio.current?.pause();
+    const audio = new Audio(honkUrl(file));
+    currentAudio.current = audio;
+    audio.play().catch(() => {});
+  };
 
   const honkIt = () => {
     play(honkType);
