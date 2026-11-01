@@ -1,37 +1,250 @@
-.App {
+.app {
+  min-height: 100svh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
-  padding-top: 100px;
+  padding: clamp(20px, 5vh, 48px) 16px 40px;
+  box-sizing: border-box;
+  gap: clamp(16px, 4vh, 40px);
+}
+
+/* ---------- Header ---------- */
+
+.header {
   text-align: center;
+}
+
+.title {
+  margin: 0;
+  font-family: 'Bungee', system-ui, sans-serif;
+  font-weight: 400;
+  font-size: clamp(2.5rem, 9vw, 4.5rem);
+  line-height: 1;
+  letter-spacing: 0.02em;
+  color: var(--accent);
+  text-shadow: 0.06em 0.06em 0 var(--ink);
+}
+
+.tagline {
+  margin: 0.5em 0 0;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+/* ---------- Main ---------- */
+
+.main {
+  width: 100%;
+  max-width: 720px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(28px, 6vh, 56px);
+}
+
+/* ---------- Honk button ---------- */
+
+.honk-stage {
+  --size: clamp(190px, 58vmin, 340px);
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+
+.honk-bezel {
+  padding: calc(var(--size) * 0.07);
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 35%, #4a4550, #1d1a22 70%);
+  box-shadow:
+    0 calc(var(--size) * 0.04) 0 #0c0a0f,
+    0 calc(var(--size) * 0.08) calc(var(--size) * 0.12) rgba(0, 0, 0, 0.35);
 }
 
 .honk-button {
   appearance: none;
   -webkit-appearance: none;
-  background-color: #ff0000;
-  border: 4px solid #000000;
-  border-radius: 300px;
-  padding: 60px 6px;
-  font-size: 100px;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  user-select: none;
+  width: var(--size);
+  aspect-ratio: 1;
+  border: none;
+  border-radius: 50%;
   cursor: pointer;
+  font-family: 'Bungee', system-ui, sans-serif;
+  font-size: calc(var(--size) * 0.19);
+  color: #fff;
+  text-shadow: 0 0.06em 0 rgba(90, 0, 10, 0.55);
+  background: radial-gradient(circle at 35% 28%, #ff9a8f 0%, #f23b3b 38%, #b0101c 100%);
+  box-shadow:
+    0 calc(var(--size) * 0.05) 0 #6b0911,
+    inset 0 calc(var(--size) * -0.04) calc(var(--size) * 0.07) rgba(0, 0, 0, 0.25),
+    inset 0 calc(var(--size) * 0.03) calc(var(--size) * 0.05) rgba(255, 255, 255, 0.4);
+  transform: translateY(0);
+  transition: transform 70ms ease-out, box-shadow 70ms ease-out;
+}
+
+.honk-button:hover {
+  filter: brightness(1.05);
 }
 
 .honk-button:active {
-  transform: scale(0.97);
+  transform: translateY(calc(var(--size) * 0.04));
+  box-shadow:
+    0 calc(var(--size) * 0.01) 0 #6b0911,
+    inset 0 calc(var(--size) * -0.02) calc(var(--size) * 0.05) rgba(0, 0, 0, 0.3),
+    inset 0 calc(var(--size) * 0.03) calc(var(--size) * 0.05) rgba(255, 255, 255, 0.3);
 }
 
 .honk-button:focus-visible {
-  outline: 4px solid #0066ff;
-  outline-offset: 4px;
+  outline: 4px solid var(--focus);
+  outline-offset: calc(var(--size) * 0.09);
 }
 
-.visually-hidden {
+/* ---------- HONK! bursts ---------- */
+
+.bursts {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.burst {
+  position: absolute;
+  left: 50%;
+  top: 8%;
+  font-family: 'Bungee', system-ui, sans-serif;
+  font-size: calc(var(--size) * 0.14);
+  color: var(--burst);
+  -webkit-text-stroke: 2px var(--ink);
+  paint-order: stroke fill;
+  white-space: nowrap;
+  animation: burst 700ms ease-out forwards;
+}
+
+@keyframes burst {
+  0% {
+    opacity: 0;
+    transform: translate(calc(-50% + var(--x)), 20%) rotate(var(--tilt)) scale(0.6);
+  }
+  20% {
+    opacity: 1;
+    transform: translate(calc(-50% + var(--x)), -20%) rotate(var(--tilt)) scale(1.1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(calc(-50% + var(--x)), -120%) rotate(var(--tilt)) scale(1);
+  }
+}
+
+/* ---------- Sound chips ---------- */
+
+.sounds {
+  margin: 0;
+  padding: 0;
+  border: none;
+  min-width: 0;
+  width: 100%;
+}
+
+.sounds-legend {
+  display: block;
+  width: 100%;
+  margin-bottom: 14px;
+  text-align: center;
+  font-family: 'Bungee', system-ui, sans-serif;
+  font-size: 1rem;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+.chip {
+  position: relative;
+  display: inline-flex;
+  cursor: pointer;
+}
+
+/* Visually hide the radio but keep it focusable and announced;
+   clicking the label selects it. */
+.chip input {
   position: absolute;
   width: 1px;
   height: 1px;
-  overflow: hidden;
-  clip-path: inset(50%);
-  white-space: nowrap;
+  margin: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.chip-face {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45em;
+  padding: 0.55em 0.95em;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  background: var(--chip);
+  color: var(--ink);
+  font-weight: 700;
+  font-size: 0.95rem;
+  box-shadow: 0 3px 0 var(--ink);
+  transition: transform 80ms ease-out, box-shadow 80ms ease-out, background-color 120ms;
+  user-select: none;
+}
+
+.chip-emoji {
+  font-size: 1.15em;
+  line-height: 1;
+}
+
+.chip:hover .chip-face {
+  background: var(--chip-hover);
+}
+
+.chip:active .chip-face {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 var(--ink);
+}
+
+.chip input:checked + .chip-face {
+  background: var(--accent);
+  border-color: var(--ink);
+  color: #fff;
+}
+
+.chip input:focus-visible + .chip-face {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+}
+
+/* ---------- Motion preferences ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .honk-button,
+  .chip-face {
+    transition: none;
+  }
+
+  .burst {
+    animation-name: burst-fade;
+  }
+
+  @keyframes burst-fade {
+    0%,
+    60% {
+      opacity: 1;
+      transform: translate(calc(-50% + var(--x)), -20%);
+    }
+    100% {
+      opacity: 0;
+      transform: translate(calc(-50% + var(--x)), -20%);
+    }
+  }
 }
