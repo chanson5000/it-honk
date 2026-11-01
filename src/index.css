@@ -1,5 +1,58 @@
+:root {
+  color-scheme: light dark;
+  --bg: #fff3d4;
+  --dots: rgba(120, 72, 0, 0.09);
+  --ink: #1d1a22;
+  --muted: #6b5a43;
+  --accent: #e5322f;
+  --burst: #ffd23f;
+  --chip: #fffaf0;
+  --chip-hover: #ffe9b0;
+  --focus: #1f6feb;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #17141d;
+    --dots: rgba(255, 255, 255, 0.05);
+    --ink: #0b0a0e;
+    --muted: #b9ad9c;
+    --accent: #f0443f;
+    --burst: #ffd23f;
+    --chip: #2a2532;
+    --chip-hover: #3a3345;
+    --focus: #6ea8ff;
+  }
+
+  .title,
+  .chip-face {
+    color: #f6efe3;
+  }
+
+  .title {
+    color: var(--accent);
+  }
+
+  .honk-bezel {
+    background: radial-gradient(circle at 50% 35%, #5a5462, #2a2530 70%);
+    box-shadow:
+      0 0 0 2px rgba(255, 255, 255, 0.08),
+      0 calc(var(--size) * 0.04) 0 #000,
+      0 calc(var(--size) * 0.08) calc(var(--size) * 0.12) rgba(0, 0, 0, 0.6);
+  }
+
+  .chip-face {
+    border-color: #4c4458;
+    box-shadow: 0 3px 0 #000;
+  }
+}
+
 body {
   margin: 0;
+  background-color: var(--bg);
+  background-image: radial-gradient(var(--dots) 1.5px, transparent 1.5px);
+  background-size: 22px 22px;
+  color: var(--ink);
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
