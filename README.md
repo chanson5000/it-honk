@@ -5,7 +5,7 @@ Good luck at Principal, Dwayne!
 
 ## Development
 
-Requires Node.js 22.12+ (see `.nvmrc`).
+Requires Node.js 22.22.2+, 24.15+, or 26+ (see `.nvmrc`).
 
 ```bash
 npm install
@@ -22,4 +22,12 @@ Drop the audio file in `public/honks/` and add an entry to the `HONKS` list in `
 ## Deployment
 
 Every push to `master` is tested, built, and deployed to GitHub Pages by
-`.github/workflows/ci.yml`. The custom domain is set by `public/CNAME`.
+`.github/workflows/ci.yml`.
+
+One-time repository setup (Settings → Pages):
+
+- **Source:** GitHub Actions
+- **Custom domain:** `www.ithonk.page`, with **Enforce HTTPS** on
+
+Because the site is deployed by Actions, the custom domain lives in these
+settings; a `CNAME` file in the build output is not used.
