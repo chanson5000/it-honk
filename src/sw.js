@@ -8,6 +8,11 @@ const PRECACHE = self.__PRECACHE__;
 const VERSION = self.__VERSION__;
 const CACHE = `it-honk-${VERSION}`;
 
+// GitHub Pages sends `Vary: Accept-Encoding`, and audio elements request
+// `Accept-Encoding: identity`, so a Vary-aware lookup would never match the
+// precached copies. Every precached file is static, so ignore Vary.
+const MATCH = { ignoreSearch: true, ignoreVary: true };
+
 // Resolve relative paths against the worker's location so the site works at
 // any base path (custom domain root or /it-honk/).
 const toUrl = (path) => new URL(path, self.registration.scope).href;
@@ -46,14 +51,14 @@ self.addEventListener('fetch', (event) => {
   if (request.mode === 'navigate') {
     // Network first for the page so updates show up right away online;
     // fall back to the cached page when offline.
-    event.respondWith(fetch(request).catch(() => caches.match(INDEX)));
+    event.respondWith(fetch(request).catch(() => caches.match(INDEX, MATCH)));
     return;
   }
 
   // Cache first for hashed assets, icons and sounds.
   event.respondWith(
     caches
-      .match(request, { ignoreSearch: true })
+      .match(request, MATCH)
       .then((cached) => cached || fetch(request)),
   );
 });
