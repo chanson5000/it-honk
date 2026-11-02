@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import './App.css';
 
 export const HONKS = [
@@ -50,6 +50,36 @@ function App() {
     play(file);
   };
 
+  // Keyboard shortcut: Space or H honks from anywhere on the page.
+  const [keyPressed, setKeyPressed] = useState(false);
+  useEffect(() => {
+    const isHonkKey = (event) => event.key === ' ' || event.key === 'h' || event.key === 'H';
+    // Let the honk button and text fields handle their own keys (the button
+    // already treats Space as a click). Radio chips are fine to honk from.
+    const handledNatively = (target) =>
+      target.closest?.('button, select, textarea, [contenteditable="true"]') ||
+      (target.tagName === 'INPUT' && target.type !== 'radio');
+
+    const onKeyDown = (event) => {
+      if (!isHonkKey(event) || event.ctrlKey || event.metaKey || event.altKey) return;
+      if (handledNatively(event.target)) return;
+      event.preventDefault(); // stop Space from scrolling the page
+      if (event.repeat) return; // holding the key honks once
+      setKeyPressed(true);
+      honkIt();
+    };
+    const onKeyUp = (event) => {
+      if (isHonkKey(event)) setKeyPressed(false);
+    };
+
+    window.addEventListener('keydown', onKeyDown);
+    window.addEventListener('keyup', onKeyUp);
+    return () => {
+      window.removeEventListener('keydown', onKeyDown);
+      window.removeEventListener('keyup', onKeyUp);
+    };
+  });
+
   return (
     <div className="app">
       <header className="header">
@@ -60,7 +90,12 @@ function App() {
       <main className="main">
         <div className="honk-stage">
           <div className="honk-bezel">
-            <button type="button" className="honk-button" onClick={honkIt}>
+            <button
+              type="button"
+              className={`honk-button${keyPressed ? ' is-pressed' : ''}`}
+              onClick={honkIt}
+              aria-keyshortcuts="Space H"
+            >
               Honk
             </button>
           </div>
@@ -77,6 +112,10 @@ function App() {
             ))}
           </div>
         </div>
+
+        <p className="key-hint">
+          Press <kbd>Space</kbd> or <kbd>H</kbd> to honk
+        </p>
 
         <fieldset className="sounds">
           <legend className="sounds-legend">Pick your honk</legend>

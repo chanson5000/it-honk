@@ -68,3 +68,49 @@ it('stops the previous honk when a new one starts', () => {
   expect(instances[1].pause).toHaveBeenCalledOnce();
   expect(instances[2].pause).not.toHaveBeenCalled();
 });
+
+it('honks with the Space or H key', () => {
+  render(<App />);
+
+  fireEvent.keyDown(document.body, { key: ' ' });
+  fireEvent.keyUp(document.body, { key: ' ' });
+  fireEvent.keyDown(document.body, { key: 'h' });
+
+  expect(AudioMock).toHaveBeenCalledTimes(2);
+  expect(AudioMock).toHaveBeenLastCalledWith(url('ahooga.mp3'));
+  expect(screen.getAllByText('HONK!')).toHaveLength(2);
+});
+
+it('honks once while a key is held down', () => {
+  render(<App />);
+  const button = screen.getByRole('button', { name: /honk/i });
+
+  fireEvent.keyDown(document.body, { key: 'h' });
+  expect(button).toHaveClass('is-pressed');
+  fireEvent.keyDown(document.body, { key: 'h', repeat: true });
+  fireEvent.keyDown(document.body, { key: 'h', repeat: true });
+  fireEvent.keyUp(document.body, { key: 'h' });
+
+  expect(AudioMock).toHaveBeenCalledOnce();
+  expect(button).not.toHaveClass('is-pressed');
+});
+
+it('leaves keys on the focused honk button and modifier shortcuts alone', () => {
+  render(<App />);
+
+  fireEvent.keyDown(screen.getByRole('button', { name: /honk/i }), { key: ' ' });
+  fireEvent.keyDown(document.body, { key: 'h', metaKey: true });
+  fireEvent.keyDown(document.body, { key: 'h', ctrlKey: true });
+
+  expect(AudioMock).not.toHaveBeenCalled();
+});
+
+it('honks from the keyboard while a sound chip has focus', () => {
+  render(<App />);
+  fireEvent.click(screen.getByRole('radio', { name: /goose/i }));
+  AudioMock.mockClear();
+
+  fireEvent.keyDown(screen.getByRole('radio', { name: /goose/i }), { key: ' ' });
+
+  expect(AudioMock).toHaveBeenCalledWith(url('goose.mp3'));
+});
