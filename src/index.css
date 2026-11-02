@@ -41,6 +41,12 @@
       0 calc(var(--size) * 0.08) calc(var(--size) * 0.12) rgba(0, 0, 0, 0.6);
   }
 
+  .key-hint kbd {
+    color: #f6efe3;
+    border-color: #4c4458;
+    box-shadow: 0 2px 0 #000;
+  }
+
   .chip-face {
     border-color: #4c4458;
     box-shadow: 0 3px 0 #000;

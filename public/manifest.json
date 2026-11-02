@@ -1,6 +1,11 @@
 {
-  "short_name": "It Honk",
+  "id": ".",
   "name": "It Honk",
+  "short_name": "It Honk",
+  "description": "Swingin' honks.",
+  "start_url": ".",
+  "scope": ".",
+  "display": "standalone",
   "icons": [
     {
       "src": "favicon.svg",
@@ -24,8 +29,6 @@
       "purpose": "maskable"
     }
   ],
-  "start_url": ".",
-  "display": "standalone",
   "theme_color": "#e5322f",
   "background_color": "#fff3d4"
 }

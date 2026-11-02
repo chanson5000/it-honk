@@ -3,6 +3,12 @@ For those who are easily distracted by [swingin' honks](https://www.ithonk.page)
 
 Good luck at Principal, Dwayne!
 
+## Features
+
+- Press **Space** or **H** to honk from the keyboard.
+- Installable and works offline after the first visit. `src/sw.js` is the
+  service worker; the build fills in the list of files to cache.
+
 ## Development
 
 Requires Node.js 22.22.2+, 24.15+, or 26+ (see `.nvmrc`).
